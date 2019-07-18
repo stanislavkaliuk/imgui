@@ -197,14 +197,6 @@ static void ImGui_ImplWin32_UpdateMousePos()
         if (ImGuiViewport* viewport = ImGui::FindViewportByPlatformHandle((void*)hovered_hwnd))
             if ((viewport->Flags & ImGuiViewportFlags_NoInputs) == 0) // FIXME: We still get our NoInputs window with WM_NCHITTEST/HTTRANSPARENT code when decorated?
                 io.MouseHoveredViewport = viewport->ID;
-
-#if 0
-    POINT pos;
-    if (HWND active_window = ::GetForegroundWindow())
-        if (active_window == g_hWnd || ::IsChild(active_window, g_hWnd))
-            if (::GetCursorPos(&pos) && ::ScreenToClient(g_hWnd, &pos))
-                io.MousePos = ImVec2((float)pos.x, (float)pos.y);
-#endif
 }
 
 #ifdef _MSC_VER
@@ -212,7 +204,7 @@ static void ImGui_ImplWin32_UpdateMousePos()
 #endif
 
 // Gamepad navigation mapping
-void    ImGui_ImplWin32_UpdateGameControllers()
+static void ImGui_ImplWin32_UpdateGamepads()
 {
     ImGuiIO& io = ImGui::GetIO();
     memset(io.NavInputs, 0, sizeof(io.NavInputs));
@@ -295,7 +287,7 @@ void    ImGui_ImplWin32_NewFrame()
     }
 
     // Update game controllers (if available)
-    ImGui_ImplWin32_UpdateGameControllers();
+    ImGui_ImplWin32_UpdateGamepads();
 }
 
 // Allow compilation with old Windows SDK. MinGW doesn't have default _WIN32_WINNT/WINVER versions.
@@ -311,7 +303,7 @@ void    ImGui_ImplWin32_NewFrame()
 // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
 // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
 // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-// PS: In this Win32 handler, we use the capture API (GetCapture/SetCapture/ReleaseCapture) to be able to read mouse coordinations when dragging mouse outside of our window bounds.
+// PS: In this Win32 handler, we use the capture API (GetCapture/SetCapture/ReleaseCapture) to be able to read mouse coordinates when dragging mouse outside of our window bounds.
 // PS: We treat DBLCLK messages as regular mouse down messages, so this code will work on windows classes that have the CS_DBLCLKS flag set. Our own example app code doesn't set this flag.
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -446,6 +438,10 @@ void ImGui_ImplWin32_EnableDpiAwareness()
         SetProcessDPIAware();
     }
 }
+
+#ifdef _MSC_VER
+#pragma comment(lib, "gdi32")   // GetDeviceCaps()
+#endif
 
 float ImGui_ImplWin32_GetDpiScaleForMonitor(void* monitor)
 {
