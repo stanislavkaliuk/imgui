@@ -15,8 +15,8 @@ we need to have them defined at here at compile time.
 */
 
 /// Pick one
-#define SPECTRUM_USE_LIGHT_THEME
-//#define SPECTRUM_USE_DARK_THEME
+//#define SPECTRUM_USE_LIGHT_THEME
+#define SPECTRUM_USE_DARK_THEME
 
 namespace ImGui {
     namespace Spectrum {
