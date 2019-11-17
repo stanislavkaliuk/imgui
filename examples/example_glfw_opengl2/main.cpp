@@ -10,6 +10,9 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl2.h"
 #include <stdio.h>
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#endif
 #include <GLFW/glfw3.h>
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
@@ -40,11 +43,12 @@ int main(int, char**)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
+    ImGui::Spectrum::StyleColorsSpectrum();
+    //ImGui::StyleColorsDark();
     //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings

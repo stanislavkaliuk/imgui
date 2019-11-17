@@ -29,7 +29,8 @@ int main(int, char**)
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
     // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
+    ImGui::Spectrum::StyleColorsSpectrum();
+    // ImGui::StyleColorsDark();
     //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings
